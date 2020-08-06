@@ -3,7 +3,11 @@
 #include <sstream>
 #include <vector>
 
+#include "AST.h"
+#include "Debug.hpp"
+
 #include "Scanner.h"
+#include "Parser.h"
 
 void run(const char* filePath)
 {
@@ -21,7 +25,14 @@ void run(const char* filePath)
     Scanner scanner(source);
     std::vector<Token> tokens = scanner.scanTokens();
     for(auto& token : tokens)
-        std::cout << token << std::endl; 
+        std::cout << token << std::endl;
+
+    Parser parser(tokens);
+    std::unique_ptr<Expr> root = parser.parse();
+
+    AstDebugger astDebugger(root.get());
+    astDebugger.debug();
+
 }
 
 int main(int argc, char* argv[])

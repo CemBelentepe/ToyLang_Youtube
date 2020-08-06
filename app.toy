@@ -1,7 +1,1 @@
-func main(){
-    var x = "This is a string.";
-    var y = 15 + 23;
-    var z += y > 2;
-    print(x, y, z);
-    return 0;
-}
+2 * (13 + 8) / -7
