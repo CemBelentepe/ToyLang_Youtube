@@ -19,25 +19,28 @@ public:
     }
 
     // (op, lhs, rhs)
-    void visit(ExprBinary* expr)
+    Value visit(ExprBinary* expr)
     {
         std::cout << "(" << expr->op.getString() << ", ";
         expr->lhs->accept(this);
         std::cout << ", ";
         expr->rhs->accept(this);
         std::cout << ")";
+        return Value();
     }
 
     // (op rhs)
-    void visit(ExprUnary* expr)
+    Value visit(ExprUnary* expr)
     {
         std::cout << "(" << expr->op.getString();
         expr->rhs->accept(this);
         std::cout << ")";
+        return Value();
     }
 
-    void visit(ExprLiteral* expr)
+    Value visit(ExprLiteral* expr)
     {
-        expr->value->print();
+        expr->value.print();
+        return Value();
     }
 };

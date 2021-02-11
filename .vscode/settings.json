@@ -64,6 +64,8 @@
         "variant": "cpp",
         "bitset": "cpp",
         "unordered_set": "cpp",
-        "valarray": "cpp"
-    }
+        "valarray": "cpp",
+        "shared_mutex": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

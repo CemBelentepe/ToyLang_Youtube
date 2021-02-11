@@ -1,9 +1,11 @@
 #pragma once
 #include <string>
 #include <iostream>
+#include <variant>
 
 enum class TypeTag
 {
+    ERR,
     BOOL,
     NUMBER,
     STRING
@@ -13,46 +15,44 @@ class Value
 {
 public:
     TypeTag tag;
-    union Data
-    {
-        bool valBool;
-        double valNumber;
-        char* valString;
-    } data;
+    std::variant<void*, bool, double, std::string> data;
+
+    Value()
+        : tag(TypeTag::ERR), data(nullptr)
+    { }
 
     Value(bool val)
-        : tag(TypeTag::BOOL)
-    {
-        data.valBool = val;
-    }
+        : tag(TypeTag::BOOL), data(val)
+    { }
 
     Value(double val)
-    : tag(TypeTag::NUMBER)
-    {
-        data.valNumber = val;
-    }
+    : tag(TypeTag::NUMBER), data(val)
+    { }
 
     Value(std::string val)
-    : tag(TypeTag::STRING)
-    {
-        data.valString = new char[val.size() + 1];
-        val.copy(data.valString, val.size(), 0);
-        data.valString[val.size()] = 0;
-    }
+    : tag(TypeTag::STRING), data(val)
+    { }
 
     void print() const
     {
-        switch(tag)
+        std::cout << *this;
+    }
+	friend std::ostream& operator<<(std::ostream& os, const Value& val)
+    {
+        switch (val.tag)
         {
         case TypeTag::BOOL:
-            std::cout << data.valBool;
+            os << (std::get<bool>(val.data) ? "true" : "false");
             break;
         case TypeTag::NUMBER:
-            std::cout << data.valNumber;
+            os << std::get<double>(val.data);
             break;
         case TypeTag::STRING:
-            std::cout << data.valString;
+            os << std::get<std::string>(val.data);
             break;
+        default:
+            os << "ERROR";
         }
+        return os;
     }
 };

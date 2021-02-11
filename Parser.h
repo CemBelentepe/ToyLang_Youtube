@@ -24,19 +24,19 @@ public:
     std::unique_ptr<Expr> unary();
     std::unique_ptr<Expr> primary();
 
-    inline Token& advance()
+    Token& advance()
     {
         return this->tokens[this->currentToken++];
     }
-    inline Token& consumed() const
+    Token& consumed() const
     {
         return this->tokens[this->currentToken - 1];
     }
-    inline Token& peek() const
+    Token& peek() const
     {
         return this->tokens[this->currentToken];
     }
-    inline Token& peekNext() const
+    Token& peekNext() const
     {
         return this->tokens[this->currentToken + 1];
     }
@@ -63,13 +63,14 @@ public:
 
 	void panic();
 
-    inline std::unique_ptr<Expr> error(const char* message)
+    std::unique_ptr<Expr> error(const char* message)
     {
         std::cout << message << std::endl;
         this->panic();
         return nullptr;
     }
-    inline std::unique_ptr<Expr> errorAtToken(const char* message)
+
+    std::unique_ptr<Expr> errorAtToken(const char* message)
     {
         std::cout << "[line" << tokens[currentToken].line << "] Error" << message << std::endl;
         this->panic();

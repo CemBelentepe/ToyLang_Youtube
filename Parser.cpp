@@ -62,13 +62,13 @@ std::unique_ptr<Expr> Parser::primary()
     switch(token.type)
     {
     case TokenType::TRUE:
-        return std::make_unique<ExprLiteral>(std::make_unique<Value>(true));
+        return std::make_unique<ExprLiteral>(Value(true));
     case TokenType::FALSE:
-        return std::make_unique<ExprLiteral>(std::make_unique<Value>(false));
+        return std::make_unique<ExprLiteral>(Value(false));
     case TokenType::NUMBER_LITERAL:
-        return std::make_unique<ExprLiteral>(std::make_unique<Value>(token.getNumber()));
+        return std::make_unique<ExprLiteral>(Value(token.getNumber()));
     case TokenType::STRING_LITERAL:
-        return std::make_unique<ExprLiteral>(std::make_unique<Value>(token.getString()));
+        return std::make_unique<ExprLiteral>(Value(token.getString()));
     case TokenType::OPEN_PAREN:
     {
         std::unique_ptr<Expr> expr = parseExpr();

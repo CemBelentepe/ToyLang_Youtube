@@ -8,6 +8,7 @@
 
 #include "Scanner.h"
 #include "Parser.h"
+#include "Interpreter.h"
 
 void run(const char* filePath)
 {
@@ -33,6 +34,12 @@ void run(const char* filePath)
     AstDebugger astDebugger(root.get());
     astDebugger.debug();
 
+    Interpreter interpreter(root);
+    int runError = interpreter.run();
+    if(runError != 0)
+    {
+        std::cout << "Exited with error code " << runError << std::endl;
+    }
 }
 
 int main(int argc, char* argv[])
