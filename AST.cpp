@@ -15,3 +15,23 @@ Value ExprLiteral::accept(AstVisitor* visitor)
 {
     return visitor->visit(this);
 }
+
+void StmtExpr::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
+void StmtBlock::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
+void StmtIf::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
+void StmtWhile::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
