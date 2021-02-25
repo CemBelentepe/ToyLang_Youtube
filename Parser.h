@@ -7,36 +7,59 @@
 #include <vector>
 
 class Expr;
+class Stmt;
 
 class Parser
 {
 private:
     std::vector<Token>& tokens;
     size_t currentToken;
+    bool hadError;
 
 public:
     Parser(std::vector<Token>& tokens);
-    std::unique_ptr<Expr> parse();
+    std::vector<std::unique_ptr<Stmt>> parse();
+    bool fail() { return hadError; }
+
+private:
+    std::unique_ptr<Stmt> statement();
+    std::unique_ptr<Stmt> exprStmt();
+    std::unique_ptr<Stmt> blockStmt();
+    std::unique_ptr<Stmt> ifStmt();
+    std::unique_ptr<Stmt> whileStmt();
 
     std::unique_ptr<Expr> parseExpr();
+    std::unique_ptr<Expr> comparison();
+    std::unique_ptr<Expr> equality();
     std::unique_ptr<Expr> addition();
     std::unique_ptr<Expr> multiplication();
     std::unique_ptr<Expr> unary();
     std::unique_ptr<Expr> primary();
 
-    inline Token& advance()
+    Token& advance()
     {
         return this->tokens[this->currentToken++];
     }
-    inline Token& consumed() const
+    Token& consumed() const
     {
         return this->tokens[this->currentToken - 1];
     }
-    inline Token& peek() const
+    void consume(TokenType type, const std::string& msg)
+    {
+        if (tokens[currentToken].type == type)
+        {
+            advance();
+        }
+        else
+        {
+            errorAtToken(msg);
+        }
+    }
+    Token& peek() const
     {
         return this->tokens[this->currentToken];
     }
-    inline Token& peekNext() const
+    Token& peekNext() const
     {
         return this->tokens[this->currentToken + 1];
     }
@@ -61,15 +84,16 @@ public:
         return false;
     }
 
-	void panic();
+    void panic();
 
-    inline std::unique_ptr<Expr> error(const char* message)
+    std::unique_ptr<Expr> error(const std::string& message)
     {
         std::cout << message << std::endl;
         this->panic();
         return nullptr;
     }
-    inline std::unique_ptr<Expr> errorAtToken(const char* message)
+
+    std::unique_ptr<Expr> errorAtToken(const std::string& message)
     {
         std::cout << "[line" << tokens[currentToken].line << "] Error" << message << std::endl;
         this->panic();

@@ -1,17 +1,37 @@
 #include "AST.h"
 #include "AstVisitor.hpp"
 
-void ExprBinary::accept(AstVisitor* visitor)
+Value ExprBinary::accept(AstVisitor* visitor)
 {
-    visitor->visit(this);
+    return visitor->visit(this);
 }
 
-void ExprUnary::accept(AstVisitor* visitor)
+Value ExprUnary::accept(AstVisitor* visitor)
 {
-    visitor->visit(this);
+    return visitor->visit(this);
 }
 
-void ExprLiteral::accept(AstVisitor* visitor)
+Value ExprLiteral::accept(AstVisitor* visitor)
 {
-    visitor->visit(this);
+    return visitor->visit(this);
+}
+
+void StmtExpr::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
+void StmtBlock::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
+void StmtIf::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
+void StmtWhile::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
 }

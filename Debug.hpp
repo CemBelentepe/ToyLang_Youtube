@@ -6,38 +6,84 @@
 class AstDebugger : public AstVisitor
 {
 private:
-    Expr* root;
+    std::vector<std::unique_ptr<Stmt>>& root;
+
 public:
-    AstDebugger(Expr* root)
+    AstDebugger(std::vector<std::unique_ptr<Stmt>>& root)
         : root(root)
-    {}
+    {
+    }
 
     void debug()
     {
-        root->accept(this);
-        std::cout << "\n";
+        for (auto& stmt : root)
+        {
+            stmt->accept(this);
+            std::cout << "\n";
+        }
     }
 
     // (op, lhs, rhs)
-    void visit(ExprBinary* expr)
+    Value visit(ExprBinary* expr) override
     {
         std::cout << "(" << expr->op.getString() << ", ";
         expr->lhs->accept(this);
         std::cout << ", ";
         expr->rhs->accept(this);
         std::cout << ")";
+        return Value();
     }
 
     // (op rhs)
-    void visit(ExprUnary* expr)
+    Value visit(ExprUnary* expr) override
     {
         std::cout << "(" << expr->op.getString();
         expr->rhs->accept(this);
         std::cout << ")";
+        return Value();
     }
 
-    void visit(ExprLiteral* expr)
+    Value visit(ExprLiteral* expr) override
     {
-        expr->value->print();
+        expr->value.print();
+        return Value();
+    }
+
+    void visit(StmtExpr* stmt) override
+    {
+        stmt->expr->accept(this);
+        std::cout << ";";
+    }
+
+    void visit(StmtBlock* stmt) override
+    {
+        std::cout << "{\n";
+        for(auto& s : stmt->stmts)
+        {
+            s->accept(this);
+            std::cout << "\n";
+        }
+        std::cout << "}";
+    }
+
+    void visit(StmtIf* stmt) override
+    {
+        std::cout << "IF ";
+        stmt->cond->accept(this);
+        std::cout << ":\n";
+        stmt->if_->accept(this);
+        if (stmt->els)
+        {
+            std::cout << "\nELSE:\n";
+            stmt->els->accept(this);
+        }
+    }
+
+    void visit(StmtWhile* stmt) override
+    {
+        std::cout << "While ";
+        stmt->cond->accept(this);
+        std::cout << ":\n";
+        stmt->body->accept(this);
     }
 };

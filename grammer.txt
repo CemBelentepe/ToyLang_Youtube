@@ -1,0 +1,28 @@
+program -> decleration*
+
+// Declaration
+decleration     -> classDecl | funcDecl | varDecl
+classDecl       -> 'class' IDENTIFIER '{' memberDecl '}'
+funcDecl        -> 'func' IDENTIFIER '(' args? ')' blockStmt
+varDecl         -> 'var' IDENTIFIER ('=' expr)? ';'
+
+memberDecl      -> IDENTIFIER '(' args? ')' blockStmt
+args            -> IDENTIFIER ( ',' IDENTIFIER )*
+
+// Statement
+stmt            -> exprStmt | blockStmt | ifStmt | whileStmt | forStmt | returnStmt
+exprStmt        -> expr ';'
+blockStmt       -> '{' (stmt | varDecl)* '}'
+ifStmt          -> 'if' '(' expr ')' stmt ('else' stmt)?
+whileStmt       -> 'while' '(' expr ')' stmt
+forStmt         -> 'for '(' (varDecl | expr)? ';' expr? ';' 'expr'? ')' stmt
+returnStmt      -> 'return' expr ';'
+
+// Expressions
+expr            -> equality
+equality        -> comparison ( '==' | '!=' ) comparison
+comparison      -> addition ( '<' | '<=' | '>=' | '>' ) addition
+addition        -> multiplication ( '+' | '-' ) multiplication
+multiplication  -> unary ( '*' | '/' ) unary
+unary           -> (( '-' | '!')  unary) | primary
+primary         -> "true" | "false" | NUMBER | STRING | ( '(' expr ')' )
