@@ -16,6 +16,16 @@ Value ExprLiteral::accept(AstVisitor* visitor)
     return visitor->visit(this);
 }
 
+Value ExprVarGet::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
+Value ExprVarSet::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
 void StmtExpr::accept(AstVisitor* visitor)
 {
     return visitor->visit(this);
@@ -32,6 +42,11 @@ void StmtIf::accept(AstVisitor* visitor)
 }
 
 void StmtWhile::accept(AstVisitor* visitor)
+{
+    return visitor->visit(this);
+}
+
+void StmtVarDecl::accept(AstVisitor* visitor)
 {
     return visitor->visit(this);
 }
